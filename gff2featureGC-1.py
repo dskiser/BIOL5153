@@ -30,8 +30,9 @@ for feature in features:
 		if feature == data[2].strip():
 			length+=int(data[5])
 	# number of G and C nucleotides
-			G_content += genome[int(data[3]):int(data[4])].count("G")
-			C_content += genome[int(data[3]):int(data[4])].count("C")
+			end_index = int(data[4]) + 1
+			G_content += genome[int(data[3]):end_index].count("G")
+			C_content += genome[int(data[3]):end_index].count("C")
 			G_and_C = G_content + C_content
 	feature_length.append(length)
 	GC_number.append(G_and_C)
