@@ -1,10 +1,22 @@
 #! /home/dskiser/anaconda3/bin/python3.6
 
+
+# check arguments
+import sys
+if len(sys.argv) < 3:
+	print(sys.argv[0] + ": requires .fasta and .gff files")
+	sys.exit()
+
+# read arguments
+fsa = sys.argv[1]
+gff = sys.argv[2]
+
 # find length of genome
-fsa_file = open("watermelon.fsa", "r")
+fsa_file = open(fsa, "r")
+genome = ''
 for line in fsa_file:
 	if not line.startswith('>'):
-		genome = line
+		genome = genome + line.strip()
 fsa_file.close()
 genome_length = len(genome)
 
@@ -19,7 +31,7 @@ GC_content = []
 # for each feature, calculate ...
 feature_num = 0
 for feature in features:
-	gff_file = open("watermelon.gff", "r")
+	gff_file = open(gff, "r")
 	
 	# sum of lengths
 	length = 0
@@ -30,9 +42,9 @@ for feature in features:
 		if feature == data[2].strip():
 			length+=int(data[5])
 	# number of G and C nucleotides
-			end_index = int(data[4]) + 1
-			G_content += genome[int(data[3]):end_index].count("G")
-			C_content += genome[int(data[3]):end_index].count("C")
+			start_index = int(data[3]) - 1
+			G_content += genome[start_index:int(data[4])].count("G")
+			C_content += genome[start_index:int(data[4])].count("C")
 			G_and_C = G_content + C_content
 	feature_length.append(length)
 	GC_number.append(G_and_C)
@@ -46,16 +58,15 @@ for feature in features:
 	raw_percentage = (feature_length[feature_num]/genome_length) * 100
 	rounded_percentage = "(" + str(round(raw_percentage, 1)) + "%)"  
 	percent_genome.append(rounded_percentage)
+	
+	# print output
+	features[0] = "exon"
+	template = "{0:15}{1:7} {2:7}{3:15}"
+	print(template.format(features[feature_num], feature_length[feature_num], percent_genome[feature_num], GC_content[feature_num]))
 	feature_num+=1
 	
 	# close file
 	gff_file.close()
-	
-# output
-features[0] = "exon"
-output_lines = (len(features))
-template = "{0:15}{1:7} {2:7}{3:15}"
-for number in range(0, output_lines):
-	print(template.format(features[number], feature_length[number], percent_genome[number], GC_content[number]))
+
 
 
