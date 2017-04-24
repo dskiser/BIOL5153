@@ -1,6 +1,17 @@
 #! /home/dskiser/anaconda3/bin/python3.6
 
-
+# function to clean up a DNA sequence
+def clean_seq(input_seq):
+	clean = input_seq.upper()
+	clean = clean.replace('N','')
+	return clean
+	
+# function to count a nucleotide
+def nuc_count(sequence, base):
+	length = len(sequence)
+	nuc_count = sequence.count(base)
+	return nuc_count
+	
 # check arguments
 import sys
 if len(sys.argv) < 3:
@@ -43,8 +54,9 @@ for feature in features:
 			length+=int(data[5])
 	# number of G and C nucleotides
 			start_index = int(data[3]) - 1
-			G_content += genome[start_index:int(data[4])].count("G")
-			C_content += genome[start_index:int(data[4])].count("C")
+			strand = clean_seq(genome[start_index:int(data[4])])
+			G_content += nuc_count(strand, "G")
+			C_content += nuc_count(strand, "C")
 			G_and_C = G_content + C_content
 	feature_length.append(length)
 	GC_number.append(G_and_C)
