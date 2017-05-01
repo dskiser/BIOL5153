@@ -90,8 +90,6 @@ ordered_exons = collections.OrderedDict(sorted(exon_sequences.items()))
 # concatenate sequences of each exon
 for exon, sequence in ordered_exons.items():
 	parsed_exon = exon.split(' ')
-	if '-' in parsed_exon[0]:
-		parsed_exon = parsed_exon[0].split('-')
 	if parsed_exon[0] in gene_sequences:
 		gene_sequences[parsed_exon[0]] += sequence
 	else:
