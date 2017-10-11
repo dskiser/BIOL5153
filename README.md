@@ -1,3 +1,5 @@
 # BIOL5153
-many, many changes
-many, more changes
+
+Programming for Biologists (BIOL 5153) homework
+
+Spring 2017
